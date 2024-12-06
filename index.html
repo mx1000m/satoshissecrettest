@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8"/>
+    <title>Satoshi's Secret</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <meta property="og:title" content="Satoshi's Secret">
+    <meta property="og:description" content="Embark on a new adventure with Satoshi's Secret! Connect your wallet and start playing.">
+    <meta property="og:image" content="character.gif">
+    <meta property="og:url" content="https://satoshissecret.com">
+    
+	<style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #10121c;
+            background-image: url('pixelstars.gif');
+            background-repeat: repeat;
+            background-size: auto;
+	    overflow-y: auto;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-weight: normal;
+        }
+
+        #container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            max-width: 80%; 
+        }
+        
+
+        #logo {
+            max-width: 80%; 
+            height: auto;
+            max-height: 180px;
+            margin-bottom: 22px;
+		margin-top: 100px;
+        }
+
+        #character {
+            max-width: 20%;
+            height: auto;
+            margin: 0px 0; 
+            margin-bottom: -22px;
+        }
+
+        #popup {
+            font-family: 'Roboto';
+            font-weight: 500; 
+            background: #10121c;
+            padding: 20px;
+            border-radius: 8px;
+            color: #ffffff;
+            margin-top: 20px;
+	    margin-bottom: 100px;
+        }
+
+        #buttonContainer {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        #connectWallet, #mintNFT, #startGame {
+            font-family: 'Roboto';
+            font-weight: 700;
+            font-size: 1em;
+            background-image: linear-gradient(to right, #72d7e4, #3e77f4);
+            padding: 15px 40px;
+            color: #ffffff;
+            border-radius: 40px;
+            transition: 0.5s;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            text-transform: uppercase;
+        }
+
+        #connectWallet:hover, #mintNFT:hover, #startGame:hover {
+            background-image: linear-gradient(to right, #52909c, #3258a8);
+        }
+
+        #banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to right, #8bd4e2, #4d7aec);
+    color: white;
+    text-align: center;
+    padding: 0;
+    font-size: 0.83rem;
+    font-weight: 700;
+    z-index: 1000;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: top 0.5s ease-out;
+}
+
+#banner.hidden {
+            top: -40px; /* Set the banner to be hidden above the screen */
+        }
+
+
+
+
+
+        #footer-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #10121c;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 0.7em;
+            letter-spacing: 1px;
+            font-weight: normal;
+    font-weight: 700;
+        }
+
+        #footer-banner p {
+            margin: 0;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #8bd4e2, #4d7aec);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, #8bd4e2, #4d7aec);
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        #mx1000 {
+            text-decoration-color: transparent;
+            background: linear-gradient(to right, #79a7e1, #79a7e1);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+
+
+        @media (max-width: 767px) {
+            #logo {
+                max-width: 80%;
+                max-height: 300px;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        .wallet-icon-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .wallet-icon-container button {
+            background: transparent;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            width: 25%;
+        }
+        
+        .wallet-icon-container .icon-wrapperMM {
+            background-color: #fcefdc;
+            background-image: linear-gradient(135deg, #fff9f0, #f3d8b4);
+            border-radius: 12px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wallet-icon-container .icon-wrapperMM img {
+            width: 50px;
+            height: 50px;
+        }
+        
+
+
+        .wallet-icon-container .icon-wrapperCBW {
+            background-color: #1963ff;
+            background-image: linear-gradient(135deg, #1963ff, #0152ff);
+            border-radius: 12px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wallet-icon-container .icon-wrapperCBW img {
+            width: 50px;
+            height: 50px;
+        }
+
+
+
+        .wallet-icon-container .icon-wrapperConnectWallet {
+            background-color: #ffffff;
+            background-image: linear-gradient(135deg, #ffffff, #f2f1f1);
+            border-radius: 12px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wallet-icon-container .icon-wrapperConnectWallet img {
+            width: 50px;
+            height: 28px;
+        }
+
+
+
+
+    
+        
+        .wallet-icon-container span {
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: 'Roboto', sans-serif;
+        }
+
+
+
+
+
+
+
+
+
+/* Hide the spinner arrows */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+    </style>
+
+
+
+
+
+    <!-- Include Web3.js and WalletConnect -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.8.1/web3.min.js"></script>
+<script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
+<script src="https://unpkg.com/web3modal@1.9.9/dist/index.js"></script>
+
+    <!-- Libs and GDJS core files : -->
+		<script src="libs/jshashtable.js" crossorigin="anonymous"></script>
+        <script src="logger.js" crossorigin="anonymous"></script>
+        <script src="gd.js" crossorigin="anonymous"></script>
+        <script src="libs/rbush.js" crossorigin="anonymous"></script>
+        <script src="AsyncTasksManager.js" crossorigin="anonymous"></script>
+        <script src="inputmanager.js" crossorigin="anonymous"></script>
+        <script src="jsonmanager.js" crossorigin="anonymous"></script>
+        <script src="Model3DManager.js" crossorigin="anonymous"></script>
+        <script src="ResourceLoader.js" crossorigin="anonymous"></script>
+        <script src="ResourceCache.js" crossorigin="anonymous"></script>
+        <script src="timemanager.js" crossorigin="anonymous"></script>
+        <script src="polygon.js" crossorigin="anonymous"></script>
+        <script src="runtimeobject.js" crossorigin="anonymous"></script>
+        <script src="profiler.js" crossorigin="anonymous"></script>
+        <script src="RuntimeInstanceContainer.js" crossorigin="anonymous"></script>
+        <script src="runtimescene.js" crossorigin="anonymous"></script>
+        <script src="scenestack.js" crossorigin="anonymous"></script>
+        <script src="force.js" crossorigin="anonymous"></script>
+        <script src="RuntimeLayer.js" crossorigin="anonymous"></script>
+        <script src="layer.js" crossorigin="anonymous"></script>
+        <script src="RuntimeCustomObjectLayer.js" crossorigin="anonymous"></script>
+        <script src="timer.js" crossorigin="anonymous"></script>
+        <script src="runtimewatermark.js" crossorigin="anonymous"></script>
+        <script src="runtimegame.js" crossorigin="anonymous"></script>
+        <script src="variable.js" crossorigin="anonymous"></script>
+        <script src="variablescontainer.js" crossorigin="anonymous"></script>
+        <script src="oncetriggers.js" crossorigin="anonymous"></script>
+        <script src="runtimebehavior.js" crossorigin="anonymous"></script>
+        <script src="SpriteAnimator.js" crossorigin="anonymous"></script>
+        <script src="spriteruntimeobject.js" crossorigin="anonymous"></script>
+        <script src="affinetransformation.js" crossorigin="anonymous"></script>
+        <script src="CustomRuntimeObjectInstanceContainer.js" crossorigin="anonymous"></script>
+        <script src="CustomRuntimeObject.js" crossorigin="anonymous"></script>
+        <script src="CustomRuntimeObject2D.js" crossorigin="anonymous"></script>
+        <script src="events-tools/commontools.js" crossorigin="anonymous"></script>
+        <script src="events-tools/variabletools.js" crossorigin="anonymous"></script>
+        <script src="events-tools/runtimescenetools.js" crossorigin="anonymous"></script>
+        <script src="events-tools/inputtools.js" crossorigin="anonymous"></script>
+        <script src="events-tools/objecttools.js" crossorigin="anonymous"></script>
+        <script src="events-tools/cameratools.js" crossorigin="anonymous"></script>
+        <script src="events-tools/soundtools.js" crossorigin="anonymous"></script>
+        <script src="events-tools/storagetools.js" crossorigin="anonymous"></script>
+        <script src="events-tools/stringtools.js" crossorigin="anonymous"></script>
+        <script src="events-tools/windowtools.js" crossorigin="anonymous"></script>
+        <script src="events-tools/networktools.js" crossorigin="anonymous"></script>
+        <script src="splash/gd-logo-light.js" crossorigin="anonymous"></script>
+        <script src="pixi-renderers/pixi.js" crossorigin="anonymous"></script>
+        <script src="pixi-renderers/pixi-filters-tools.js" crossorigin="anonymous"></script>
+        <script src="pixi-renderers/runtimegame-pixi-renderer.js" crossorigin="anonymous"></script>
+        <script src="pixi-renderers/runtimescene-pixi-renderer.js" crossorigin="anonymous"></script>
+        <script src="pixi-renderers/layer-pixi-renderer.js" crossorigin="anonymous"></script>
+        <script src="pixi-renderers/pixi-image-manager.js" crossorigin="anonymous"></script>
+        <script src="pixi-renderers/pixi-bitmapfont-manager.js" crossorigin="anonymous"></script>
+        <script src="pixi-renderers/spriteruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+        <script src="pixi-renderers/CustomRuntimeObject2DPixiRenderer.js" crossorigin="anonymous"></script>
+        <script src="pixi-renderers/DebuggerPixiRenderer.js" crossorigin="anonymous"></script>
+        <script src="pixi-renderers/loadingscreen-pixi-renderer.js" crossorigin="anonymous"></script>
+        <script src="pixi-renderers/pixi-effects-manager.js" crossorigin="anonymous"></script>
+        <script src="howler-sound-manager/howler.min.js" crossorigin="anonymous"></script>
+        <script src="howler-sound-manager/howler-sound-manager.js" crossorigin="anonymous"></script>
+        <script src="fontfaceobserver-font-manager/fontfaceobserver.js" crossorigin="anonymous"></script>
+        <script src="fontfaceobserver-font-manager/fontfaceobserver-font-manager.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__autotyping__autotyping.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__buttonstates__buttonfsm.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__flashtransitionpainter__flashtransitionpainter.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__panelspritebutton__buttonfsm.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__panelspritebutton__panelspritebutton.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__shakeobject__shakeobject_positionangle.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__shakeobject__shakeobject_positionanglescale.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__angleto4way-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__angleto8way-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__deadzone-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__isanglein4waydirection-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__isanglein8waydirection-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__isbuttonpressed-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__isbuttonreleased-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__isdirectionpushed4way-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__isdirectionpushed8way-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__joystickangle-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__joystickforce-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__multitouchbutton.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__multitouchjoystick.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__setbuttonstate-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__setdeadzone-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__setjoystickangle-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__setjoystickforce-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__spritemultitouchjoystick.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__stickangle-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__stickforce-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__stickforcex-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__stickforcey-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__spritemultitouchjoystick__topdownmultitouchmapper.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__sticker__definehelperclasses-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__sticker__isstuck-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__sticker__sticker.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__timeformatter__secondstohhmmss-func.js" crossorigin="anonymous"></script>
+        <script src="gdjs-evtsext__timeformatter__secondstohhmmss000-func.js" crossorigin="anonymous"></script>
+        <script src="Extensions/AnchorBehavior/anchorruntimebehavior.js" crossorigin="anonymous"></script>
+        <script src="Extensions/BitmapText/bitmaptextruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+        <script src="Extensions/BitmapText/bitmaptextruntimeobject.js" crossorigin="anonymous"></script>
+        <script src="Extensions/DebuggerTools/debuggertools.js" crossorigin="anonymous"></script>
+        <script src="Extensions/Firebase/A_firebasejs/A_firebase-base.js" crossorigin="anonymous"></script>
+        <script src="Extensions/Firebase/A_firebasejs/B_firebase-firestore.js" crossorigin="anonymous"></script>
+        <script src="Extensions/Firebase/B_firebasetools/C_firebasetools.js" crossorigin="anonymous"></script>
+        <script src="Extensions/Firebase/B_firebasetools/D_cloudfirestoretools.js" crossorigin="anonymous"></script>
+        <script src="Extensions/Lighting/lightobstacleruntimebehavior.js" crossorigin="anonymous"></script>
+        <script src="Extensions/Lighting/lightruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+        <script src="Extensions/Lighting/lightruntimeobject.js" crossorigin="anonymous"></script>
+        <script src="Extensions/PanelSpriteObject/panelspriteruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+        <script src="Extensions/PanelSpriteObject/panelspriteruntimeobject.js" crossorigin="anonymous"></script>
+        <script src="Extensions/PathfindingBehavior/PathTools.js" crossorigin="anonymous"></script>
+        <script src="Extensions/PathfindingBehavior/pathfindingobstacleruntimebehavior.js" crossorigin="anonymous"></script>
+        <script src="Extensions/PathfindingBehavior/pathfindingruntimebehavior.js" crossorigin="anonymous"></script>
+        <script src="Extensions/PrimitiveDrawing/pixi-graphics-extras/graphics-extras.min.js" crossorigin="anonymous"></script>
+        <script src="Extensions/PrimitiveDrawing/shapepainterruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+        <script src="Extensions/PrimitiveDrawing/shapepainterruntimeobject.js" crossorigin="anonymous"></script>
+        <script src="Extensions/SystemInfo/systeminfotools.js" crossorigin="anonymous"></script>
+        <script src="Extensions/TextInput/textinputruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+        <script src="Extensions/TextInput/textinputruntimeobject.js" crossorigin="anonymous"></script>
+        <script src="Extensions/TextObject/textruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+        <script src="Extensions/TextObject/textruntimeobject.js" crossorigin="anonymous"></script>
+        <script src="Extensions/TiledSpriteObject/tiledspriteruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+        <script src="Extensions/TiledSpriteObject/tiledspriteruntimeobject.js" crossorigin="anonymous"></script>
+        <script src="Extensions/TopDownMovementBehavior/topdownmovementruntimebehavior.js" crossorigin="anonymous"></script>
+        <script src="Extensions/TweenBehavior/TweenManager.js" crossorigin="anonymous"></script>
+        <script src="Extensions/TweenBehavior/tweenruntimebehavior.js" crossorigin="anonymous"></script>
+        <script src="object-capabilities/AnimatableBehavior.js" crossorigin="anonymous"></script>
+        <script src="object-capabilities/EffectBehavior.js" crossorigin="anonymous"></script>
+        <script src="object-capabilities/FlippableBehavior.js" crossorigin="anonymous"></script>
+        <script src="object-capabilities/OpacityBehavior.js" crossorigin="anonymous"></script>
+        <script src="object-capabilities/ResizableBehavior.js" crossorigin="anonymous"></script>
+        <script src="object-capabilities/ScalableBehavior.js" crossorigin="anonymous"></script>
+        <script src="object-capabilities/TextContainerBehavior.js" crossorigin="anonymous"></script>
+        <script src="Extensions/3D/HemisphereLight.js" crossorigin="anonymous"></script>
+        <script src="code0.js" crossorigin="anonymous"></script>
+        <script src="code1.js" crossorigin="anonymous"></script>
+        <script src="code2.js" crossorigin="anonymous"></script>
+        <script src="code3.js" crossorigin="anonymous"></script>
+        <script src="code4.js" crossorigin="anonymous"></script>
+        <script src="code5.js" crossorigin="anonymous"></script>
+        <script src="code6.js" crossorigin="anonymous"></script>
+        <script src="code7.js" crossorigin="anonymous"></script>
+        <script src="code8.js" crossorigin="anonymous"></script>
+        <script src="data.js" crossorigin="anonymous"></script>
+
+
+</head>
+<body>
+
+    <div id="banner">
+        Make sure you are visiting -&nbsphttps://satoshissecret.com/
+    </div>
+
+    <div id="container">
+        <div id="logoCharacterContainer">
+            <img src="SatoshisSecret_Logo.gif" alt="Satoshi's Secret Logo" id="logo">
+            <div id="characterContainer">
+                <img src="character.gif" alt="Character" id="character">
+            </div>
+        </div>
+        <div id="popup">
+            <p>Connect your wallet to embark on a new adventure and start playing.</p>
+            <div id="buttonContainer">
+                <button id="connectWallet">Connect wallet</button>
+            </div>
+            <p id="mobileText" style="margin-top: 10px; font-size: 0.7em; opacity: 0.6; display: none;">Optimized for mobile, ideal on desktop.</p>
+            <script>
+                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                    document.getElementById('mobileText').style.display = 'block';
+                }
+            </script>
+        </div>
+    </div>
+    
+    <div id="footer-banner">
+        <hr>
+        <p><a href="https://x.com/mx1000m" target="_blank" id="mx1000">Made with 💙 by MX1000</a>.</p>
+    </div>
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    <script>
+const providerOptions = {
+    walletconnect: {
+        package: WalletConnectProvider,
+        options: {
+            rpc: {
+                8453: "https://base.llamarpc.com"
+            },
+            chainId: 8453
+        }
+    }
+};
+
+const web3Modal = new Web3Modal.default({
+    cacheProvider: false,
+    providerOptions,
+    disableInjectedProvider: false,
+    theme: "dark"
+});
+
+const NFT_CONTRACT_ABI = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"FailedToSendEth","type":"error"},{"inputs":[{"internalType":"uint256","name":"sent","type":"uint256"},{"internalType":"uint256","name":"expected","type":"uint256"}],"name":"IncorrectETHAmount","type":"error"},{"inputs":[{"internalType":"string","name":"message","type":"string"}],"name":"InvalidCollectionRequest","type":"error"},{"inputs":[],"name":"InvalidContractAddress","type":"error"},{"inputs":[],"name":"InvalidInitialization","type":"error"},{"inputs":[],"name":"InvalidMintQuantity","type":"error"},{"inputs":[],"name":"MintingClosed","type":"error"},{"inputs":[],"name":"MintingNotStarted","type":"error"},{"inputs":[],"name":"NotInitializing","type":"error"},{"inputs":[],"name":"OutOfSupply","type":"error"},{"inputs":[],"name":"OverClaimLimit","type":"error"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"inputs":[],"name":"ReentrancyGuardReentrantCall","type":"error"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"TokenDoesNotExist","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":true,"internalType":"uint256","name":"id","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"operator","type":"address"},{"indexed":false,"internalType":"bool","name":"approved","type":"bool"}],"name":"ApprovalForAll","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint64","name":"version","type":"uint64"}],"name":"Initialized","type":"event"},{"anonymous":false,"inputs":[],"name":"MintConfigChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferStarted","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"quantity","type":"uint256"}],"name":"TokenForgeMint","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"quantity","type":"uint256"},{"indexed":false,"internalType":"string","name":"comment","type":"string"}],"name":"TokenForgeMintComment","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":true,"internalType":"uint256","name":"id","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Withdrawn","type":"event"},{"inputs":[],"name":"acceptOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"id","type":"uint256"}],"name":"approve","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"contractURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"quantity","type":"uint256"}],"name":"cost","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"currentTokenId","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"getApproved","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getMetadata","outputs":[{"components":[{"internalType":"address","name":"creator","type":"address"},{"internalType":"string","name":"name","type":"string"},{"internalType":"string","name":"description","type":"string"},{"internalType":"string","name":"symbol","type":"string"},{"internalType":"string","name":"image","type":"string"},{"internalType":"string","name":"animation_url","type":"string"},{"internalType":"string","name":"mintType","type":"string"},{"internalType":"uint128","name":"maxSupply","type":"uint128"},{"internalType":"uint128","name":"maxPerWallet","type":"uint128"},{"internalType":"uint256","name":"cost","type":"uint256"},{"internalType":"uint256","name":"startTime","type":"uint256"},{"internalType":"uint256","name":"endTime","type":"uint256"},{"components":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amt","type":"uint256"}],"internalType":"struct Royalty[]","name":"royalties","type":"tuple[]"},{"internalType":"uint256","name":"nonce","type":"uint256"}],"internalType":"struct CollectionCreationRequest","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[{"components":[{"internalType":"address","name":"creator","type":"address"},{"internalType":"string","name":"name","type":"string"},{"internalType":"string","name":"description","type":"string"},{"internalType":"string","name":"symbol","type":"string"},{"internalType":"string","name":"image","type":"string"},{"internalType":"string","name":"animation_url","type":"string"},{"internalType":"string","name":"mintType","type":"string"},{"internalType":"uint128","name":"maxSupply","type":"uint128"},{"internalType":"uint128","name":"maxPerWallet","type":"uint128"},{"internalType":"uint256","name":"cost","type":"uint256"},{"internalType":"uint256","name":"startTime","type":"uint256"},{"internalType":"uint256","name":"endTime","type":"uint256"},{"components":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amt","type":"uint256"}],"internalType":"struct Royalty[]","name":"royalties","type":"tuple[]"},{"internalType":"uint256","name":"nonce","type":"uint256"}],"internalType":"struct CollectionCreationRequest","name":"request","type":"tuple"},{"internalType":"address","name":"mintingContract_","type":"address"}],"name":"initialize","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"}],"name":"isApprovedForAll","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"metadata","outputs":[{"internalType":"address","name":"creator","type":"address"},{"internalType":"string","name":"name","type":"string"},{"internalType":"string","name":"description","type":"string"},{"internalType":"string","name":"symbol","type":"string"},{"internalType":"string","name":"image","type":"string"},{"internalType":"string","name":"animation_url","type":"string"},{"internalType":"string","name":"mintType","type":"string"},{"internalType":"uint128","name":"maxSupply","type":"uint128"},{"internalType":"uint128","name":"maxPerWallet","type":"uint128"},{"internalType":"uint256","name":"cost","type":"uint256"},{"internalType":"uint256","name":"startTime","type":"uint256"},{"internalType":"uint256","name":"endTime","type":"uint256"},{"internalType":"uint256","name":"nonce","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"quantity","type":"uint256"}],"name":"mint","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"quantity","type":"uint256"},{"internalType":"string","name":"comment","type":"string"}],"name":"mintWithComment","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"mintingContract","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"id","type":"uint256"}],"name":"ownerOf","outputs":[{"internalType":"address","name":"owner","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pendingOwner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"id","type":"uint256"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"operator","type":"address"},{"internalType":"bool","name":"approved","type":"bool"}],"name":"setApprovalForAll","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"components":[{"internalType":"address","name":"creator","type":"address"},{"internalType":"string","name":"name","type":"string"},{"internalType":"string","name":"description","type":"string"},{"internalType":"string","name":"symbol","type":"string"},{"internalType":"string","name":"image","type":"string"},{"internalType":"string","name":"animation_url","type":"string"},{"internalType":"string","name":"mintType","type":"string"},{"internalType":"uint128","name":"maxSupply","type":"uint128"},{"internalType":"uint128","name":"maxPerWallet","type":"uint128"},{"internalType":"uint256","name":"cost","type":"uint256"},{"internalType":"uint256","name":"startTime","type":"uint256"},{"internalType":"uint256","name":"endTime","type":"uint256"},{"components":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amt","type":"uint256"}],"internalType":"struct Royalty[]","name":"royalties","type":"tuple[]"},{"internalType":"uint256","name":"nonce","type":"uint256"}],"internalType":"struct CollectionCreationRequest","name":"metadata_","type":"tuple"}],"name":"setMetadata","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"tokenURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"id","type":"uint256"}],"name":"transferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"}];
+
+const CONTRACT_ADDRESS = "0x3b98bb2F071385fb959E6393c845046D2d776c3F";
+const CHAIN_ID = 8453;
+const CHAIN_NAME = "Base";
+const RPC_URL = "https://base.llamarpc.com";
+const BLOCK_EXPLORER_URL = "https://basescan.org";
+const NFT_PRICE = 0.0005;
+
+async function initWalletConnect() {
+    try {
+        const provider = await web3Modal.connect();
+        return provider;
+    } catch (error) {
+        console.error("WalletConnect initialization failed:", error);
+        throw error;
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const connectWalletButton = document.getElementById("connectWallet");
+    const popup = document.getElementById("popup");
+
+    function isMobileDevice() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
+    function closeMobileWalletOptions() {
+        const modal = document.querySelector('.wallet-connect-modal');
+        const backdrop = document.querySelector('.wallet-connect-backdrop');
+        if (modal) {
+            modal.style.transform = 'translateY(100%)';
+            backdrop.style.opacity = '0';
+            setTimeout(() => {
+                modal.remove();
+                backdrop.remove();
+            }, 300);
+        }
+    }
+
+    function createMobileWalletOptions() {
+        const backdrop = document.createElement('div');
+        backdrop.className = 'wallet-connect-backdrop';
+        backdrop.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+            z-index: 999;
+        `;
+        document.body.appendChild(backdrop);
+
+        const modal = document.createElement('div');
+        modal.className = 'wallet-connect-modal';
+        modal.style.cssText = `
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #4180f3;
+            background-image: linear-gradient(135deg, #71d4e5, #4180f3);
+            padding: 20px;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-out;
+            z-index: 1000;
+        `;
+
+        modal.innerHTML = `
+            <div style="text-align: center; margin-bottom: 20px;">
+                <p style="margin: 0; color: white; font-size: 18px; font-weight: 700; font-family: 'Roboto', sans-serif;">Choose your wallet:</p>
+            </div>
+            <div class="wallet-icon-container">
+                <button id="metamaskMobile">
+                    <div class="icon-wrapperMM">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask">
+                    </div>
+                    <span>MetaMask</span>
+                </button>
+                <button id="coinbaseWalletMobile">
+                    <div class="icon-wrapperCBW">
+                        <img src="https://play-lh.googleusercontent.com/wrgUujbq5kbn4Wd4tzyhQnxOXkjiGqq39N4zBvCHmxpIiKcZw_Pb065KTWWlnoejsg=w480-h960-rw" alt="Coinbase Wallet">
+                    </div>
+                    <span>CB Wallet</span>
+                </button>
+                <button id="walletConnectMobile">
+                    <div class="icon-wrapperConnectWallet">
+                        <img src="https://1000logos.net/wp-content/uploads/2022/05/WalletConnect-Logo.png" alt="WalletConnect">
+                    </div>
+                    <span>WalletConnect</span>
+                </button>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        setTimeout(() => {
+            backdrop.style.opacity = '1';
+            modal.style.transform = 'translateY(0)';
+        }, 50);
+
+        backdrop.addEventListener('click', closeMobileWalletOptions);
+
+
+
+
+// CHANGE specific URL ONCE LAUNCHED ON FINAL DOMAIN
+        document.getElementById('metamaskMobile').addEventListener('click', async () => {
+    closeMobileWalletOptions();
+    if (window.ethereum && window.ethereum.isMetaMask) {
+        try {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const web3 = new Web3(window.ethereum);
+            await handleProviderConnection(window.ethereum);
+        } catch (error) {
+            console.error("MetaMask connection error:", error);
+        }
+    } else {
+        const dappUrl = "https://mx1000m.github.io/satoshitest/";
+        // Using MetaMask's universal link format with your specific URL
+        window.location.href = `https://metamask.app.link/browse/${encodeURIComponent(dappUrl)}`;
+        
+        // Fallback after a delay
+        setTimeout(() => {
+            // If MetaMask isn't installed, redirect to app store
+            if (/(iPhone|iPad|iPod)/.test(navigator.userAgent)) {
+                window.location.href = 'https://apps.apple.com/app/metamask/id1438144202';
+            } else {
+                window.location.href = 'https://metamask.io/download.html';
+            }
+        }, 1500);
+    }
+});
+
+
+
+
+
+
+
+
+
+        document.getElementById('coinbaseWalletMobile').addEventListener('click', async () => {
+            closeMobileWalletOptions();
+            const dappUrl = window.location.href;
+            if (window.ethereum && window.ethereum.isCoinbaseWallet) {
+                try {
+                    await window.ethereum.enable();
+                    const web3 = new Web3(window.ethereum);
+                    await handleProviderConnection(window.ethereum);
+                } catch (error) {
+                    console.error("Coinbase Wallet connection error:", error);
+                }
+            } else {
+                window.location.href = `https://go.cb-w.com/dapp?cb_url=${encodeURIComponent(dappUrl)}`;
+            }
+        });
+
+        document.getElementById('walletConnectMobile').addEventListener('click', async () => {
+            closeMobileWalletOptions();
+            try {
+                const provider = new WalletConnectProvider({
+                    rpc: {
+                        8453: "https://base.llamarpc.com"
+                    },
+                    chainId: 8453,
+                    qrcode: true
+                });
+                
+                await provider.enable();
+                await handleProviderConnection(provider);
+            } catch (error) {
+                console.error("WalletConnect error:", error);
+            }
+        });
+    }
+
+    async function handleProviderConnection(provider) {
+        try {
+            document.getElementById('logoCharacterContainer').style.display = 'none';
+            const web3 = new Web3(provider);
+            
+            let accounts;
+            if (provider.request) {
+                accounts = await provider.request({ method: 'eth_requestAccounts' });
+            } else if (provider.enable) {
+                accounts = await provider.enable();
+            } else {
+                accounts = await web3.eth.getAccounts();
+            }
+            
+            if (!accounts || accounts.length === 0) {
+                throw new Error("No accounts available. Please make sure your wallet is connected.");
+            }
+
+            await switchToBaseNetwork(web3);
+            
+            const account = accounts[0];
+            if (!web3.utils.isAddress(account)) {
+                throw new Error("Invalid account address");
+            }
+            
+            await checkNFTOwnership(account, web3);
+
+            provider.on("accountsChanged", async (newAccounts) => {
+                if (newAccounts && newAccounts.length > 0) {
+                    await checkNFTOwnership(newAccounts[0], web3);
+                }
+            });
+
+            provider.on("chainChanged", () => {
+                window.location.reload();
+            });
+        } catch (error) {
+            console.error("Provider connection error:", error.message);
+            popup.innerHTML = `
+                <p style="color: red;">Connection failed: ${error.message}</p>
+                <button id="connectWallet">Try Again</button>
+            `;
+            document.getElementById("connectWallet").addEventListener("click", handleWalletConnection);
+        }
+    }
+
+    async function switchToBaseNetwork(web3) {
+        try {
+            await web3.currentProvider.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: `0x${CHAIN_ID.toString(16)}` }],
+            });
+        } catch (switchError) {
+            if (switchError.code === 4902) {
+                await web3.currentProvider.request({
+                    method: 'wallet_addEthereumChain',
+                    params: [{
+                        chainId: `0x${CHAIN_ID.toString(16)}`,
+                        chainName: CHAIN_NAME,
+                        nativeCurrency: {
+                            name: 'ETH',
+                            symbol: 'ETH',
+                            decimals: 18
+                        },
+                        rpcUrls: [RPC_URL],
+                        blockExplorerUrls: [BLOCK_EXPLORER_URL]
+                    }]
+                });
+            }
+        }
+    }
+
+
+
+
+
+ // FETCH ETH PRICE
+    async function updateETHPrice() {
+    try {
+        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+        const data = await response.json();
+        const ethUsdPrice = data.ethereum.usd;
+        
+        window.updatePrice = function(quantity) {
+            const nftPriceETH = NFT_PRICE * quantity;
+            const nftPriceUSD = (nftPriceETH * ethUsdPrice).toFixed(2);
+            const totalETH = nftPriceETH.toFixed(6);
+            document.getElementById('priceDisplay').textContent = `${totalETH} ETH = $${nftPriceUSD}`;
+        };
+
+        const currentQuantity = parseInt(document.getElementById('mintQuantity')?.value || 1);
+        window.updatePrice(currentQuantity);
+
+        return ethUsdPrice;
+    } catch (error) {
+        console.error('Failed to fetch ETH price:', error);
+        return 820;
+    }
+}
+
+function startPriceUpdater() {
+    updateETHPrice();
+    setInterval(updateETHPrice, 60000);
+}
+
+
+
+
+
+
+
+
+
+    async function checkNFTOwnership(account, web3) {
+        try {
+            if (!account || !web3.utils.isAddress(account)) {
+                console.error("Invalid account address provided");
+                return;
+            }
+
+            const contract = new web3.eth.Contract(NFT_CONTRACT_ABI, CONTRACT_ADDRESS);
+            const balance = await contract.methods.balanceOf(account).call();
+            
+            if (parseInt(balance) > 0) {
+                document.getElementById('characterContainer').style.display = 'block';
+                popup.innerHTML = `
+                    <p>Congrats on minting ${balance} Satoshi's Secret NFT${balance > 1 ? 's' : ''}.<br> You're all set to play!</p>
+                    <button id="startGame">PLAY</button>
+                `;
+                document.getElementById('startGame').addEventListener('click', startGame);
+            } else {
+                document.getElementById('characterContainer').style.display = 'none';
+                popup.innerHTML = `
+    <div style="text-align: center;">
+        <div style="position: relative; display: inline-block; margin-bottom: 15px; margin-top: 100px; border-radius: 12px; padding: 2px;" class="gradient-border">
+            <div style="position: relative; background-color: #10121c; border-radius: 10px; padding: 10px;">
+                <img src="https://res.cloudinary.com/coin-nft/image/fetch/c_limit,q_99,w_569/f_auto/https://b891d14d436694bb9a7feeba91730b95.ipfscdn.io/ipfs/QmaMJz2qKbviv5NybxwwKKLfHQukbXhrBKiZrshdBKTL9X/Satoshissecret_betatester.gif" alt="NFT Preview" style="max-width: 300px; border-radius: 8px;">
+            </div>
+        </div>
+<style>
+    .gradient-border {
+        background: linear-gradient(
+            45deg,
+            #a7bef9 0%,
+            #4c78ec 25%,
+            #a7bef9 50%,
+            #4c78ec 75%,
+            #a7bef9 100%
+        );
+        background-size: 400% 400%;
+        animation: gradientMove 3s linear infinite;
+    }
+    
+    @keyframes gradientMove {
+        0% {
+            background-position: 0% 0%;
+        }
+        100% {
+            background-position: 100% 100%;
+        }
+    }
+</style>
+</div>
+                        </div>
+                        <p style="margin-bottom: 20px;">Mint 1 NFT to join the adventure, <br> or more to support the creator.</p>
+                        <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 15px;">
+                            <button id="decrementBtn" style="width: 40px; height: 40px; background: rgba(255, 255, 255, 0.1); border: none; border-radius: 8px; color: white; font-size: 20px; cursor: pointer;">-</button>
+<input type="number" id="mintQuantity" value="1" min="1" max="100000" style="width: 200px; background: linear-gradient(to right, #72d7e4, #3e77f4); border: none; border-radius: 8px; color: white; text-align: center; padding: 10px; font-family: 'Roboto'; font-weight: 700; -moz-appearance: textfield; appearance: textfield;">
+<button id="incrementBtn" style="width: 40px; height: 40px; background: rgba(255, 255, 255, 0.1); border: none; border-radius: 8px; color: white; font-size: 20px; cursor: pointer;">+</button>
+                        </div>
+                        <p id="priceDisplay" style="margin-bottom: 20px;">${NFT_PRICE} ETH = $0.41</p>
+                        <button id="mintNFT" style="font-family: 'Roboto'; font-weight: 700; font-size: 1em; background-image: linear-gradient(to right, #72d7e4, #3e77f4); padding: 15px 40px; color: #ffffff; border-radius: 40px; border: none; cursor: pointer;">MINT</button>
+                    <div style="margin-top: 10px;">
+<a href="https://wallet.coinbase.com/nft/mint/eip155:8453:erc721:0x3b98bb2F071385fb959E6393c845046D2d776c3F" target="_blank" style="color: white; text-decoration: none; font-size: 0.6em; opacity: 0.6; display: block; margin-top: 0px;">*Mint via Coinbase</a>
+                        </div>
+                        </div>
+                `;
+
+                window.updateQuantity = function(delta) {
+                    const input = document.getElementById('mintQuantity');
+                    let value = parseInt(input.value) + delta;
+                    value = Math.max(1, Math.min(value, 100000));
+                    input.value = value;
+                    updatePrice(value);
+                };
+
+                document.getElementById('mintQuantity').addEventListener('input', function() {
+    let value = parseInt(this.value) || 1;
+    value = Math.max(1, Math.min(value, 100000));
+    this.value = value;
+    updatePrice(value);
+});
+
+// Variables to track button hold state
+let holdIntervalId;  // Changed name to avoid conflict
+let holdTimeout;
+const holdDelay = 500; // Delay before rapid increment starts (1 second)
+const holdSpeed = 50;  // Changed name to avoid conflict
+
+// Function to handle button hold
+function handleButtonHold(delta) {
+    updateQuantity(delta);
+    holdTimeout = setTimeout(() => {
+        holdIntervalId = setInterval(() => {
+            updateQuantity(delta);
+        }, holdSpeed);
+    }, holdDelay);
+}
+
+// Function to stop holding
+function stopHolding() {
+    if (holdTimeout) clearTimeout(holdTimeout);
+    if (holdIntervalId) clearInterval(holdIntervalId);
+}
+
+// Add event listeners for increment button
+document.getElementById('incrementBtn').addEventListener('mousedown', () => handleButtonHold(1));
+document.getElementById('incrementBtn').addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    handleButtonHold(1);
+});
+
+// Add event listeners for decrement button
+document.getElementById('decrementBtn').addEventListener('mousedown', () => handleButtonHold(-1));
+document.getElementById('decrementBtn').addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    handleButtonHold(-1);
+});
+
+// Add event listeners to stop holding
+['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(eventType => {
+    document.getElementById('incrementBtn').addEventListener(eventType, stopHolding);
+    document.getElementById('decrementBtn').addEventListener(eventType, stopHolding);
+});
+
+                startPriceUpdater(); // ETH PRICE UPDATE
+                
+                document.getElementById('mintNFT').addEventListener('click', () => {
+                    const quantity = parseInt(document.getElementById('mintQuantity').value);
+                    mintNFT(web3, quantity);
+                });
+            }
+        } catch (error) {
+            console.error("NFT ownership check failed:", error);
+        }
+    }
+
+
+
+
+
+
+// Real-time gas estimates
+async function getOptimalGasLimit(web3, contract, accounts, quantity, mintCost) {
+    try {
+        // Get gas estimate for the specific transaction
+        const gasEstimate = await contract.methods.mint(accounts[0], quantity).estimateGas({
+            from: accounts[0],
+            value: mintCost
+        });
+        
+        // Add 10% buffer to the estimate
+        return Math.round(gasEstimate * 1.1);
+    } catch (error) {
+        console.log('Gas estimation failed, using fallback:', error);
+        // Fallback to network average if estimation fails
+        const block = await web3.eth.getBlock('latest');
+        return Math.round(block.gasLimit / 100); // Use 1% of block gas limit as fallback
+    }
+}
+
+// Updated mint function
+async function mintNFT(web3, quantity = 1) {
+    try {
+        const contract = new web3.eth.Contract(NFT_CONTRACT_ABI, CONTRACT_ADDRESS);
+        const accounts = await web3.eth.getAccounts();
+        const mintCost = await contract.methods.cost(quantity).call();
+        
+        // Get optimal gas limit
+        const gasLimit = await getOptimalGasLimit(web3, contract, accounts, quantity, mintCost);
+        console.log('Estimated optimal gas limit:', gasLimit);
+
+        await contract.methods.mint(accounts[0], quantity).send({ 
+            from: accounts[0],
+            value: mintCost,
+            gas: gasLimit,
+            maxFeePerGas: await web3.eth.getGasPrice() // Get current gas price
+        })
+        .on('transactionHash', hash => console.log(`Minting in progress. Hash: ${hash}`))
+        .on('receipt', receipt => {
+            console.log('Actual gas used:', receipt.gasUsed);
+            console.log('NFT Minted Successfully!');
+            checkNFTOwnership(accounts[0], web3);
+        });
+    } catch (error) {
+        console.error("Minting failed:", error);
+    }
+}
+
+
+
+
+
+
+
+async function handleWalletConnection() {
+    if (isMobileDevice()) {
+        createMobileWalletOptions();
+    } else {
+        try {
+            let provider;
+            if (window.ethereum) {
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                provider = window.ethereum;
+            } else {
+                provider = await initWalletConnect();
+            }
+            await handleProviderConnection(provider);
+        } catch (error) {
+            console.error("Wallet connection error:", error);
+            popup.innerHTML = `
+                <p style="color: red;">Connection failed. Please try again.</p>
+                <button id="connectWallet">Connect Wallet</button>
+            `;
+            document.getElementById("connectWallet").addEventListener("click", handleWalletConnection);
+        }
+    }
+}
+
+    function startGame() {
+        popup.style.display = "none";
+        document.getElementById("banner").classList.add("hidden");
+        initializeGame();
+    }
+
+    function initializeGame() {
+        const game = new gdjs.RuntimeGame(gdjs.projectData, {});
+        game.getRenderer().createStandardCanvas(document.body);
+        game.getRenderer().bindStandardEvents(game.getInputManager(), window, document);
+        game.loadAllAssets(() => game.startGameLoop());
+    }
+
+    // Auto-connect if we're in Coinbase Wallet browser
+    if (window.ethereum && window.ethereum.isCoinbaseWallet) {
+        handleWalletConnection();
+    }
+
+    connectWalletButton.addEventListener("click", handleWalletConnection);
+});
+
+
+
+
+
+
+	    
+</script>
+
+
+
+</body>
+</html>
