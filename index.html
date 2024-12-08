@@ -717,25 +717,60 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        document.getElementById('walletConnectMobile').addEventListener('click', async () => {
-            closeMobileWalletOptions();
-            try {
-                const provider = new WalletConnectProvider({
-                    rpc: {
-                        8453: "https://base.llamarpc.com"
-                    },
-                    chainId: 8453,
-                    qrcode: true
-                });
-                
-                await provider.enable();
-                await handleProviderConnection(provider);
-            } catch (error) {
-                console.error("WalletConnect error:", error);
-            }
-        });
-    }
 
+
+
+
+
+
+	    
+document.getElementById('walletConnectMobile').addEventListener('click', async () => {
+    closeMobileWalletOptions();
+    try {
+        const provider = new WalletConnectProvider({
+            rpc: {
+                8453: "https://base.llamarpc.com"
+            },
+            chainId: 8453,
+            qrcode: !isMobileDevice(), // Disable QR code on mobile
+            bridge: "https://bridge.walletconnect.org",
+            mobileLinks: [
+                "rainbow",
+                "trust",
+                "argent",
+                "imtoken",
+                "pillar",
+                "gnosis",
+                "crypto.com"
+            ]
+        });
+
+        // Register connection event handlers before enabling
+        provider.on("connect", () => {
+            console.log("WalletConnect connected");
+        });
+
+        provider.on("disconnect", (code, reason) => {
+            console.log("WalletConnect disconnected:", code, reason);
+        });
+
+        provider.on("error", (error) => {
+            console.error("WalletConnect error:", error);
+        });
+
+        await provider.enable();
+        await handleProviderConnection(provider);
+    } catch (error) {
+        console.error("WalletConnect error:", error);
+    }
+});
+
+
+
+
+
+
+	
     async function handleProviderConnection(provider) {
         try {
             document.getElementById('logoCharacterContainer').style.display = 'none';
