@@ -652,7 +652,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // CHANGE specific URL ONCE LAUNCHED ON FINAL DOMAIN
-        document.getElementById('metamaskMobile').addEventListener('click', async () => {
+      document.getElementById('metamaskMobile').addEventListener('click', async () => {
     closeMobileWalletOptions();
     if (window.ethereum && window.ethereum.isMetaMask) {
         try {
@@ -663,19 +663,29 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("MetaMask connection error:", error);
         }
     } else {
-        const dappUrl = "https://mx1000m.github.io/satoshitest/";
-        // Using MetaMask's universal link format with your specific URL
-        window.location.href = `https://metamask.app.link/browse/${encodeURIComponent(dappUrl)}`;
+        // Get the current URL, ensuring it's properly encoded
+        const currentUrl = encodeURIComponent(window.location.href);
         
-        // Fallback after a delay
+        // Construct MetaMask deep link with proper formatting
+        const metamaskDeepLink = `https://metamask.app.link/dapp/${currentUrl}`;
+        
+        // Open the deep link
+        window.location.href = metamaskDeepLink;
+        
+        // Set a timeout for fallback
         setTimeout(() => {
-            // If MetaMask isn't installed, redirect to app store
-            if (/(iPhone|iPad|iPod)/.test(navigator.userAgent)) {
-                window.location.href = 'https://apps.apple.com/app/metamask/id1438144202';
-            } else {
-                window.location.href = 'https://metamask.io/download.html';
+            // Check if the user hasn't been redirected yet
+            if (!document.hidden) {
+                // If on iOS
+                if (/(iPhone|iPad|iPod)/i.test(navigator.userAgent)) {
+                    window.location.href = 'https://apps.apple.com/app/metamask/id1438144202';
+                }
+                // If on Android
+                else {
+                    window.location.href = 'https://play.google.com/store/apps/details?id=io.metamask';
+                }
             }
-        }, 1500);
+        }, 3000); // 3 second delay before app store fallback
     }
 });
 
