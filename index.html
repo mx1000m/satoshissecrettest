@@ -528,7 +528,18 @@ const providerOptions = {
             rpc: {
                 8453: "https://base.llamarpc.com"
             },
-            chainId: 8453
+            chainId: 8453,
+            qrcode: !isMobileDevice(),
+            bridge: "https://bridge.walletconnect.org",
+            mobileLinks: [
+                "rainbow",
+                "trust",
+                "argent",
+                "imtoken",
+                "pillar",
+                "gnosis",
+                "crypto.com"
+            ]
         }
     }
 };
@@ -549,15 +560,7 @@ const RPC_URL = "https://base.llamarpc.com";
 const BLOCK_EXPLORER_URL = "https://basescan.org";
 const NFT_PRICE = 0.0005;
 
-async function initWalletConnect() {
-    try {
-        const provider = await web3Modal.connect();
-        return provider;
-    } catch (error) {
-        console.error("WalletConnect initialization failed:", error);
-        throw error;
-    }
-}
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const connectWalletButton = document.getElementById("connectWallet");
@@ -732,7 +735,7 @@ document.getElementById('walletConnectMobile').addEventListener('click', async (
                 8453: "https://base.llamarpc.com"
             },
             chainId: 8453,
-            qrcode: !isMobileDevice(), // Disable QR code on mobile
+            qrcode: !isMobileDevice(),
             bridge: "https://bridge.walletconnect.org",
             mobileLinks: [
                 "rainbow",
@@ -745,7 +748,6 @@ document.getElementById('walletConnectMobile').addEventListener('click', async (
             ]
         });
 
-        // Register connection event handlers before enabling
         provider.on("connect", () => {
             console.log("WalletConnect connected");
         });
