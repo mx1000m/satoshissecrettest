@@ -652,7 +652,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // CHANGE specific URL ONCE LAUNCHED ON FINAL DOMAIN
-      document.getElementById('metamaskMobile').addEventListener('click', async () => {
+    document.getElementById('metamaskMobile').addEventListener('click', async () => {
     closeMobileWalletOptions();
     if (window.ethereum && window.ethereum.isMetaMask) {
         try {
@@ -663,11 +663,16 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("MetaMask connection error:", error);
         }
     } else {
-        // Get the current URL, ensuring it's properly encoded
-        const currentUrl = encodeURIComponent(window.location.href);
+        // Get the current URL without the protocol
+        const hostname = window.location.hostname;
+        const pathname = window.location.pathname;
+        const search = window.location.search;
+        const cleanUrl = hostname + pathname + search;
         
-        // Construct MetaMask deep link with proper formatting
-        const metamaskDeepLink = `https://metamask.app.link/dapp/${currentUrl}`;
+        // Construct MetaMask deep link
+        const metamaskDeepLink = `https://metamask.app.link/dapp/${cleanUrl}`;
+        
+        console.log('Opening MetaMask with URL:', metamaskDeepLink); // For debugging
         
         // Open the deep link
         window.location.href = metamaskDeepLink;
@@ -685,10 +690,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     window.location.href = 'https://play.google.com/store/apps/details?id=io.metamask';
                 }
             }
-        }, 3000); // 3 second delay before app store fallback
+        }, 3000);
     }
 });
-
 
 
 
