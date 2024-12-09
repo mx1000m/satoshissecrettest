@@ -283,54 +283,19 @@ input::-webkit-inner-spin-button {
 
 
 
-.wallet-icon-container .icon-wrapperTW {
-    background-color: #3375BB;
-    background-image: linear-gradient(135deg, #3375BB, #2B5CA2);
-    border-radius: 12px;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.wallet-icon-container .icon-wrapperTW img {
-    width: 50px;
-    height: 50px;
-}
 
 
 
 
 
 
-    .gradient-border {
-        background: linear-gradient(
-            45deg,
-            #a7bef9 0%,
-            #4c78ec 25%,
-            #a7bef9 50%,
-            #4c78ec 75%,
-            #a7bef9 100%
-        );
-        background-size: 400% 400%;
-        animation: gradientMove 3s linear infinite;
-    }
-    
-    @keyframes gradientMove {
-        0% {
-            background-position: 0% 0%;
-        }
-        100% {
-            background-position: 100% 100%;
-        }
-    }
 
 
 
 
 
-		
+
+
 		
     </style>
 
@@ -341,6 +306,7 @@ input::-webkit-inner-spin-button {
     <!-- Include Web3.js and WalletConnect -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.8.1/web3.min.js"></script>
+<script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
 <script src="https://unpkg.com/web3modal@1.9.9/dist/index.js"></script>
 
     <!-- Libs and GDJS core files : -->
@@ -555,7 +521,17 @@ input::-webkit-inner-spin-button {
 
     
     <script>
-const providerOptions = {};
+const providerOptions = {
+    walletconnect: {
+        package: WalletConnectProvider,
+        options: {
+            rpc: {
+                8453: "https://base.llamarpc.com"
+            },
+            chainId: 8453
+        }
+    }
+};
 
 const web3Modal = new Web3Modal.default({
     cacheProvider: false,
@@ -641,26 +617,26 @@ document.addEventListener("DOMContentLoaded", () => {
             <div style="text-align: center; margin-bottom: 20px;">
                 <p style="margin: 0; color: white; font-size: 18px; font-weight: 700; font-family: 'Roboto', sans-serif;">Choose your wallet:</p>
             </div>
-<div class="wallet-icon-container">
-    <button id="metamaskMobile">
-        <div class="icon-wrapperMM">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask">
-        </div>
-        <span>MetaMask</span>
-    </button>
-    <button id="coinbaseWalletMobile">
-        <div class="icon-wrapperCBW">
-            <img src="https://play-lh.googleusercontent.com/wrgUujbq5kbn4Wd4tzyhQnxOXkjiGqq39N4zBvCHmxpIiKcZw_Pb065KTWWlnoejsg=w480-h960-rw" alt="Coinbase Wallet">
-        </div>
-        <span>CB Wallet</span>
-    </button>
-    <button id="trustWalletMobile">
-        <div class="icon-wrapperTW">
-            <img src="https://trustwallet.com/assets/images/favicon.png" alt="Trust Wallet">
-        </div>
-        <span>Trust Wallet</span>
-    </button>
-</div>
+            <div class="wallet-icon-container">
+                <button id="metamaskMobile">
+                    <div class="icon-wrapperMM">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask">
+                    </div>
+                    <span>MetaMask</span>
+                </button>
+                <button id="coinbaseWalletMobile">
+                    <div class="icon-wrapperCBW">
+                        <img src="https://play-lh.googleusercontent.com/wrgUujbq5kbn4Wd4tzyhQnxOXkjiGqq39N4zBvCHmxpIiKcZw_Pb065KTWWlnoejsg=w480-h960-rw" alt="Coinbase Wallet">
+                    </div>
+                    <span>CB Wallet</span>
+                </button>
+                <button id="walletConnectMobile">
+                    <div class="icon-wrapperConnectWallet">
+                        <img src="https://1000logos.net/wp-content/uploads/2022/05/WalletConnect-Logo.png" alt="WalletConnect">
+                    </div>
+                    <span>WalletConnect</span>
+                </button>
+            </div>
         `;
 
         document.body.appendChild(modal);
@@ -741,60 +717,25 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-
-
-
-document.getElementById('trustWalletMobile').addEventListener('click', async () => {
-    closeMobileWalletOptions();
-    
-    const dappUrl = window.location.href;
-    const isTrustWallet = window.ethereum && window.ethereum.isTrust;
-    
-    if (isTrustWallet) {
-        try {
-            await window.ethereum.request({ method: 'eth_requestAccounts' });
-            const web3 = new Web3(window.ethereum);
-            await handleProviderConnection(window.ethereum);
-        } catch (error) {
-            console.error("Trust Wallet connection error:", error);
-        }
-    } else {
-        // Get the current URL without the protocol
-        const hostname = window.location.hostname;
-        const pathname = window.location.pathname;
-        const search = window.location.search;
-        const cleanUrl = hostname + pathname + search;
-        
-        // Construct Trust Wallet deep link
-        const trustWalletDeepLink = `trust://open_url?url=${encodeURIComponent(`https://${cleanUrl}`)}`;
-        
-        console.log('Opening Trust Wallet with URL:', trustWalletDeepLink);
-        
-        // Open the deep link
-        window.location.href = trustWalletDeepLink;
-        
-        // Set a timeout for fallback
-        setTimeout(() => {
-            if (!document.hidden) {
-                // If on iOS
-                if (/(iPhone|iPad|iPod)/i.test(navigator.userAgent)) {
-                    window.location.href = 'https://apps.apple.com/app/trust-crypto-bitcoin-wallet/id1288339409';
-                }
-                // If on Android
-                else {
-                    window.location.href = 'https://play.google.com/store/apps/details?id=com.wallet.crypto.trustapp';
-                }
+        document.getElementById('walletConnectMobile').addEventListener('click', async () => {
+            closeMobileWalletOptions();
+            try {
+                const provider = new WalletConnectProvider({
+                    rpc: {
+                        8453: "https://base.llamarpc.com"
+                    },
+                    chainId: 8453,
+                    qrcode: true
+                });
+                
+                await provider.enable();
+                await handleProviderConnection(provider);
+            } catch (error) {
+                console.error("WalletConnect error:", error);
             }
-        }, 3000);
+        });
     }
-});
 
-
-    }); // Close the event listeners properly
-} // Close the createMobileWalletOptions function
-
-
-	
     async function handleProviderConnection(provider) {
         try {
             document.getElementById('logoCharacterContainer').style.display = 'none';
@@ -934,7 +875,29 @@ function startPriceUpdater() {
                 <img src="https://github.com/mx1000m/satoshissecrettest/raw/4a3924f18d9913a9c70f689868dbd478b0c97fe4/SATOSHINFT.gif" alt="NFT Preview" style="max-width: 300px; border-radius: 8px;">
             </div>
         </div>
-
+<style>
+    .gradient-border {
+        background: linear-gradient(
+            45deg,
+            #a7bef9 0%,
+            #4c78ec 25%,
+            #a7bef9 50%,
+            #4c78ec 75%,
+            #a7bef9 100%
+        );
+        background-size: 400% 400%;
+        animation: gradientMove 3s linear infinite;
+    }
+    
+    @keyframes gradientMove {
+        0% {
+            background-position: 0% 0%;
+        }
+        100% {
+            background-position: 100% 100%;
+        }
+    }
+</style>
 </div>
                         </div>
                         <p style="margin-bottom: 20px;">Mint 1 NFT to join the adventure, <br> or more to support the creator.</p>
@@ -1115,17 +1078,13 @@ async function handleWalletConnection() {
         game.loadAllAssets(() => game.startGameLoop());
     }
 
- // Auto-connect if we're in Coinbase Wallet browser
+    // Auto-connect if we're in Coinbase Wallet browser
     if (window.ethereum && window.ethereum.isCoinbaseWallet) {
         handleWalletConnection();
     }
 
-    // Add event listener for connect wallet button
-    const connectWalletButton = document.getElementById("connectWallet");
-    if (connectWalletButton) {
-        connectWalletButton.addEventListener("click", handleWalletConnection);
-    }
-}); // Close DOMContentLoaded event listener
+    connectWalletButton.addEventListener("click", handleWalletConnection);
+});
 
 
 
