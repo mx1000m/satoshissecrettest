@@ -698,9 +698,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-
-
-
         document.getElementById('coinbaseWalletMobile').addEventListener('click', async () => {
             closeMobileWalletOptions();
             const dappUrl = window.location.href;
@@ -725,8 +722,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    document.getElementById('walletConnectMobile').addEventListener('click', async () => {
+        document.getElementById('walletConnectMobile').addEventListener('click', async () => {
     closeMobileWalletOptions();
+    
+    // First try Trust Wallet if it's installed
     if (window.ethereum && window.ethereum.isTrust) {
         try {
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -736,31 +735,41 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Trust Wallet connection error:", error);
         }
     } else {
-        // Get the current URL without the protocol
+        // If Trust Wallet is not installed, try deep linking first
         const hostname = window.location.hostname;
         const pathname = window.location.pathname;
         const search = window.location.search;
         const cleanUrl = hostname + pathname + search;
         
-        // Construct Trust Wallet deep link
         const trustWalletDeepLink = `https://link.trustwallet.com/open_url?url=${encodeURIComponent(`https://${cleanUrl}`)}`;
         
-        console.log('Opening Trust Wallet with URL:', trustWalletDeepLink); // For debugging
-        
-        // Open the deep link
+        // Try to open Trust Wallet
         window.location.href = trustWalletDeepLink;
         
-        // Set a timeout for fallback to app stores
-        setTimeout(() => {
-            
+        // Set a timeout to fall back to WalletConnect if Trust Wallet doesn't open
+        setTimeout(async () => {
             if (!document.hidden) {
-                // If on iOS
-                if (/(iPhone|iPad|iPod)/i.test(navigator.userAgent)) {
-                    window.location.href = 'https://apps.apple.com/app/trust-crypto-bitcoin-wallet/id1288339409';
-                }
-                // If on Android
-                else {
-                    window.location.href = 'https://play.google.com/store/apps/details?id=com.wallet.crypto.trustapp';
+                try {
+                    // Fall back to WalletConnect
+                    const provider = new WalletConnectProvider({
+                        rpc: {
+                            8453: "https://base.llamarpc.com"
+                        },
+                        chainId: 8453,
+                        qrcode: true
+                    });
+                    
+                    await provider.enable();
+                    await handleProviderConnection(provider);
+                } catch (error) {
+                    console.error("WalletConnect error:", error);
+                    
+                    // If WalletConnect fails, redirect to app store
+                    if (/(iPhone|iPad|iPod)/i.test(navigator.userAgent)) {
+                        window.location.href = 'https://apps.apple.com/app/trust-crypto-bitcoin-wallet/id1288339409';
+                    } else {
+                        window.location.href = 'https://play.google.com/store/apps/details?id=com.wallet.crypto.trustapp';
+                    }
                 }
             }
         }, 3000);
