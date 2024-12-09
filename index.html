@@ -829,14 +829,31 @@ document.getElementById('okxWalletMobile').addEventListener('click', async () =>
             await checkNFTOwnership(account, web3);
 
             provider.on("accountsChanged", async (newAccounts) => {
-                if (newAccounts && newAccounts.length > 0) {
-                    await checkNFTOwnership(newAccounts[0], web3);
-                }
-            });
+            if (!newAccounts || newAccounts.length === 0) {
+                // No accounts - user disconnected their wallet
+                window.location.reload();
+            } else {
+                await checkNFTOwnership(newAccounts[0], web3);
+            }
+        });
 
-            provider.on("chainChanged", () => {
+        // Handle chain changes
+        provider.on("chainChanged", () => {
+            window.location.reload();
+        });
+
+        // Handle disconnect for WalletConnect
+        provider.on("disconnect", () => {
+            window.location.reload();
+        });
+
+        // Additional disconnect handler for MetaMask
+        if (window.ethereum && window.ethereum.isMetaMask) {
+            window.ethereum.on("disconnect", () => {
                 window.location.reload();
             });
+        }
+
         } catch (error) {
             console.error("Provider connection error:", error.message);
             popup.innerHTML = `
