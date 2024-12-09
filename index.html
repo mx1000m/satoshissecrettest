@@ -632,9 +632,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 </button>
                 <button id="walletConnectMobile">
                     <div class="icon-wrapperConnectWallet">
-                        <img src="https://1000logos.net/wp-content/uploads/2022/05/WalletConnect-Logo.png" alt="WalletConnect">
+                         <img src="https://trustwallet.com/assets/images/favicon.png" alt="Trust Wallet">
                     </div>
-                    <span>WalletConnect</span>
+                    <span>Trust Wallet</span>
                 </button>
             </div>
         `;
@@ -717,24 +717,63 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
+
+
+
+
+
+
         document.getElementById('walletConnectMobile').addEventListener('click', async () => {
-            closeMobileWalletOptions();
-            try {
-                const provider = new WalletConnectProvider({
-                    rpc: {
-                        8453: "https://base.llamarpc.com"
-                    },
-                    chainId: 8453,
-                    qrcode: true
-                });
-                
-                await provider.enable();
-                await handleProviderConnection(provider);
-            } catch (error) {
-                console.error("WalletConnect error:", error);
+    closeMobileWalletOptions();
+    
+    // Check if Trust Wallet is installed
+    if (window.ethereum && window.ethereum.isTrust) {
+        try {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const web3 = new Web3(window.ethereum);
+            await handleProviderConnection(window.ethereum);
+        } catch (error) {
+            console.error("Trust Wallet connection error:", error);
+        }
+    } else {
+        // Get the current URL without the protocol
+        const hostname = window.location.hostname;
+        const pathname = window.location.pathname;
+        const search = window.location.search;
+        const cleanUrl = hostname + pathname + search;
+        
+        // Construct Trust Wallet deep link
+        const trustWalletDeepLink = `https://link.trustwallet.com/open_url?url=${encodeURIComponent(`https://${cleanUrl}`)}`;
+        
+        console.log('Opening Trust Wallet with URL:', trustWalletDeepLink); // For debugging
+        
+        // Open the deep link
+        window.location.href = trustWalletDeepLink;
+        
+        // Set a timeout for fallback to app stores
+        setTimeout(() => {
+            // Check if the user hasn't been redirected yet
+            if (!document.hidden) {
+                // If on iOS
+                if (/(iPhone|iPad|iPod)/i.test(navigator.userAgent)) {
+                    window.location.href = 'https://apps.apple.com/app/trust-crypto-bitcoin-wallet/id1288339409';
+                }
+                // If on Android
+                else {
+                    window.location.href = 'https://play.google.com/store/apps/details?id=com.wallet.crypto.trustapp';
+                }
             }
-        });
+        }, 3000);
     }
+});
+
+
+
+
+
+
+
+
 
     async function handleProviderConnection(provider) {
         try {
@@ -781,6 +820,15 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("connectWallet").addEventListener("click", handleWalletConnection);
         }
     }
+
+
+
+
+
+
+
+
+
 
     async function switchToBaseNetwork(web3) {
         try {
