@@ -300,7 +300,27 @@ input::-webkit-inner-spin-button {
 }
 
 
-
+    .gradient-border {
+        background: linear-gradient(
+            45deg,
+            #a7bef9 0%,
+            #4c78ec 25%,
+            #a7bef9 50%,
+            #4c78ec 75%,
+            #a7bef9 100%
+        );
+        background-size: 400% 400%;
+        animation: gradientMove 3s linear infinite;
+    }
+    
+    @keyframes gradientMove {
+        0% {
+            background-position: 0% 0%;
+        }
+        100% {
+            background-position: 100% 100%;
+        }
+    }
 
 
 
@@ -907,8 +927,11 @@ function startPriceUpdater() {
             if (parseInt(balance) > 0) {
                 document.getElementById('characterContainer').style.display = 'block';
                 popup.innerHTML = `
+                     <div style="text-align: center;">
+                    <img src="SatoshisSecret_GAMEON.gif" alt="Game On" style="max-width: 300px; margin-bottom: 20px;">
                     <p>Congrats on minting ${balance} Satoshi's Secret NFT${balance > 1 ? 's' : ''}.<br> You're all set to play!</p>
                     <button id="startGame">PLAY</button>
+                </div>
                 `;
                 document.getElementById('startGame').addEventListener('click', startGame);
             } else {
@@ -920,29 +943,6 @@ function startPriceUpdater() {
                 <img src="https://github.com/mx1000m/satoshissecrettest/raw/4a3924f18d9913a9c70f689868dbd478b0c97fe4/SATOSHINFT.gif" alt="NFT Preview" style="max-width: 300px; border-radius: 8px;">
             </div>
         </div>
-<style>
-    .gradient-border {
-        background: linear-gradient(
-            45deg,
-            #a7bef9 0%,
-            #4c78ec 25%,
-            #a7bef9 50%,
-            #4c78ec 75%,
-            #a7bef9 100%
-        );
-        background-size: 400% 400%;
-        animation: gradientMove 3s linear infinite;
-    }
-    
-    @keyframes gradientMove {
-        0% {
-            background-position: 0% 0%;
-        }
-        100% {
-            background-position: 100% 100%;
-        }
-    }
-</style>
 </div>
                         </div>
                         <p style="margin-bottom: 20px;">Mint 1 NFT to join the adventure, <br> or more to support the creator.</p>
@@ -952,7 +952,7 @@ function startPriceUpdater() {
 <button id="incrementBtn" style="width: 40px; height: 40px; background: rgba(255, 255, 255, 0.1); border: none; border-radius: 8px; color: white; font-size: 20px; cursor: pointer;">+</button>
                         </div>
                         <p id="priceDisplay" style="margin-bottom: 20px;">${NFT_PRICE} ETH = $0.41</p>
-                        <button id="mintNFT" style="font-family: 'Roboto'; font-weight: 700; font-size: 1em; background-image: linear-gradient(to right, #72d7e4, #3e77f4); padding: 15px 40px; color: #ffffff; border-radius: 40px; border: none; cursor: pointer;">MINT</button>
+                        <button id="mintNFT" style="font-family: 'Roboto'; font-weight: 700; font-size: 1em; padding: 15px 40px; color: #ffffff; border-radius: 40px; border: none; cursor: pointer;">MINT</button>
                     <div style="margin-top: 10px;">
 <a href="https://wallet.coinbase.com/nft/mint/eip155:8453:erc721:0x3b98bb2F071385fb959E6393c845046D2d776c3F" target="_blank" style="color: white; text-decoration: none; font-size: 0.6em; opacity: 0.6; display: block; margin-top: 0px;">*Mint via Coinbase</a>
                         </div>
