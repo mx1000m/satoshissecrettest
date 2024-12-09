@@ -1115,13 +1115,17 @@ async function handleWalletConnection() {
         game.loadAllAssets(() => game.startGameLoop());
     }
 
-    // Auto-connect if we're in Coinbase Wallet browser
+ // Auto-connect if we're in Coinbase Wallet browser
     if (window.ethereum && window.ethereum.isCoinbaseWallet) {
         handleWalletConnection();
     }
 
-    connectWalletButton.addEventListener("click", handleWalletConnection);
-});
+    // Add event listener for connect wallet button
+    const connectWalletButton = document.getElementById("connectWallet");
+    if (connectWalletButton) {
+        connectWalletButton.addEventListener("click", handleWalletConnection);
+    }
+}); // Close DOMContentLoaded event listener
 
 
 
