@@ -299,17 +299,6 @@ input::-webkit-inner-spin-button {
     width: 50px;
     height: 50px;
 }
-</style>
-
-
-
-
-
-
-
-
-
-
 
 
 		
@@ -733,24 +722,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        document.getElementById('walletConnectMobile').addEventListener('click', async () => {
-            closeMobileWalletOptions();
-            try {
-                const provider = new WalletConnectProvider({
-                    rpc: {
-                        8453: "https://base.llamarpc.com"
-                    },
-                    chainId: 8453,
-                    qrcode: true
-                });
-                
-                await provider.enable();
-                await handleProviderConnection(provider);
-            } catch (error) {
-                console.error("WalletConnect error:", error);
-            }
-        });
-    }
 
 
 
