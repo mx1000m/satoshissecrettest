@@ -752,7 +752,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         // Set a timeout for fallback to app stores
         setTimeout(() => {
-            // Check if the user hasn't been redirected yet
+            
             if (!document.hidden) {
                 // If on iOS
                 if (/(iPhone|iPad|iPod)/i.test(navigator.userAgent)) {
@@ -767,29 +767,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-document.getElementById('walletConnectMobilee').addEventListener('click', async () => {
-            closeMobileWalletOptions();
-            try {
-                const provider = new WalletConnectProvider({
-                    rpc: {
-                        8453: "https://base.llamarpc.com"
-                    },
-                    chainId: 8453,
-                    qrcode: true
-                });
-                
-                await provider.enable();
-                await handleProviderConnection(provider);
-            } catch (error) {
-                console.error("WalletConnect error:", error);
-            }
-        });
-    }
 
 
 
 
 
+
+
+
+
+    
 
 
 
@@ -1150,7 +1137,8 @@ async function handleWalletConnection() {
     }
 
     connectWalletButton.addEventListener("click", handleWalletConnection);
-});
+}});
+
 
 
 
