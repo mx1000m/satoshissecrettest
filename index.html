@@ -1050,50 +1050,51 @@ document.getElementById('decrementBtn').addEventListener('touchstart', (e) => {
 
 
 
-// Real-time gas estimates
+// Gas optimisation
 async function getOptimalGasLimit(web3, contract, accounts, quantity, mintCost) {
     try {
-        // Get gas estimate for the specific transaction
-        const gasEstimate = await contract.methods.mint(accounts[0], quantity).estimateGas({
+        const baseGasEstimate = await contract.methods.mint(accounts[0], quantity).estimateGas({
             from: accounts[0],
             value: mintCost
         });
         
-        // Add 10% buffer to the estimate
-        return Math.round(gasEstimate * 1.1);
+        // Add 20% buffer to ensure transaction success
+        return Math.round(baseGasEstimate * 1.2);
     } catch (error) {
-        console.log('Gas estimation failed, using fallback:', error);
-        // Fallback to network average if estimation fails
-        const block = await web3.eth.getBlock('latest');
-        return Math.round(block.gasLimit / 100); // Use 1% of block gas limit as fallback
+        console.error('Gas estimation failed:', error);
+        // Fallback to a higher default if estimation fails
+        return 300000 * quantity; // Base value of 300k gas per mint
     }
 }
 
-// Updated mint function
 async function mintNFT(web3, quantity = 1) {
     try {
         const contract = new web3.eth.Contract(NFT_CONTRACT_ABI, CONTRACT_ADDRESS);
         const accounts = await web3.eth.getAccounts();
         const mintCost = await contract.methods.cost(quantity).call();
         
-        // Get optimal gas limit
+        // Get base gas price (similar to MetaMask's "Market" rate)
+        const baseGasPrice = await web3.eth.getGasPrice();
+        const marketGasPrice = Math.round(Number(baseGasPrice) * 1.1); // 10% above base for market rate
+        
         const gasLimit = await getOptimalGasLimit(web3, contract, accounts, quantity, mintCost);
-        console.log('Estimated optimal gas limit:', gasLimit);
-
+        
         await contract.methods.mint(accounts[0], quantity).send({ 
             from: accounts[0],
             value: mintCost,
             gas: gasLimit,
-            maxFeePerGas: await web3.eth.getGasPrice() // Get current gas price
+            maxFeePerGas: marketGasPrice,
+            maxPriorityFeePerGas: Math.round(marketGasPrice * 0.1) // 10% of market rate for priority fee
         })
         .on('transactionHash', hash => console.log(`Minting in progress. Hash: ${hash}`))
         .on('receipt', receipt => {
-            console.log('Actual gas used:', receipt.gasUsed);
+            console.log('Gas used:', receipt.gasUsed);
             console.log('NFT Minted Successfully!');
             checkNFTOwnership(accounts[0], web3);
         });
     } catch (error) {
         console.error("Minting failed:", error);
+        throw error;
     }
 }
 
