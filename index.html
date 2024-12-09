@@ -300,6 +300,37 @@ input::-webkit-inner-spin-button {
 }
 
 
+
+
+
+
+    .gradient-border {
+        background: linear-gradient(
+            45deg,
+            #a7bef9 0%,
+            #4c78ec 25%,
+            #a7bef9 50%,
+            #4c78ec 75%,
+            #a7bef9 100%
+        );
+        background-size: 400% 400%;
+        animation: gradientMove 3s linear infinite;
+    }
+    
+    @keyframes gradientMove {
+        0% {
+            background-position: 0% 0%;
+        }
+        100% {
+            background-position: 100% 100%;
+        }
+    }
+
+
+
+
+
+		
 		
     </style>
 
@@ -310,7 +341,6 @@ input::-webkit-inner-spin-button {
     <!-- Include Web3.js and WalletConnect -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.8.1/web3.min.js"></script>
-<script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
 <script src="https://unpkg.com/web3modal@1.9.9/dist/index.js"></script>
 
     <!-- Libs and GDJS core files : -->
@@ -904,29 +934,7 @@ function startPriceUpdater() {
                 <img src="https://github.com/mx1000m/satoshissecrettest/raw/4a3924f18d9913a9c70f689868dbd478b0c97fe4/SATOSHINFT.gif" alt="NFT Preview" style="max-width: 300px; border-radius: 8px;">
             </div>
         </div>
-<style>
-    .gradient-border {
-        background: linear-gradient(
-            45deg,
-            #a7bef9 0%,
-            #4c78ec 25%,
-            #a7bef9 50%,
-            #4c78ec 75%,
-            #a7bef9 100%
-        );
-        background-size: 400% 400%;
-        animation: gradientMove 3s linear infinite;
-    }
-    
-    @keyframes gradientMove {
-        0% {
-            background-position: 0% 0%;
-        }
-        100% {
-            background-position: 100% 100%;
-        }
-    }
-</style>
+
 </div>
                         </div>
                         <p style="margin-bottom: 20px;">Mint 1 NFT to join the adventure, <br> or more to support the creator.</p>
