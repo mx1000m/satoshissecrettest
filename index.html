@@ -692,6 +692,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+
+
+
         document.getElementById('coinbaseWalletMobile').addEventListener('click', async () => {
             closeMobileWalletOptions();
             const dappUrl = window.location.href;
@@ -708,82 +711,24 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-
-
-
-
-
-
-
-
         document.getElementById('walletConnectMobile').addEventListener('click', async () => {
-    closeMobileWalletOptions();
-    
-    if (window.ethereum && window.ethereum.isTrust) {
-        try {
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            const web3 = new Web3(window.ethereum);
-            await handleProviderConnection(window.ethereum);
-        } catch (error) {
-            console.error("Trust Wallet connection error:", error);
-            // Fall back to WalletConnect on error
-            tryWalletConnect();
-        }
-    } else {
-        // Get the current URL without the protocol
-        const dappUrl = `${window.location.href}`;
-        // Construct Trust Wallet deep link
-        const trustWalletDeepLink = `https://link.trustwallet.com/open_url?coin_id=60&url=${encodeURIComponent(dappUrl)}`;
-        
-        // Try to open Trust Wallet
-        window.location.href = trustWalletDeepLink;
-        
-        // Set a timeout to fall back to WalletConnect
-        setTimeout(() => {
-            if (!document.hidden) {
-                tryWalletConnect();
+            closeMobileWalletOptions();
+            try {
+                const provider = new WalletConnectProvider({
+                    rpc: {
+                        8453: "https://base.llamarpc.com"
+                    },
+                    chainId: 8453,
+                    qrcode: true
+                });
+                
+                await provider.enable();
+                await handleProviderConnection(provider);
+            } catch (error) {
+                console.error("WalletConnect error:", error);
             }
-        }, 3000);
-    }
-});
-
-// Helper function to handle WalletConnect fallback
-async function tryWalletConnect() {
-    try {
-        const provider = new WalletConnectProvider({
-            rpc: {
-                8453: "https://base.llamarpc.com"
-            },
-            chainId: 8453,
-            qrcode: true
         });
-        
-        await provider.enable();
-        await handleProviderConnection(provider);
-    } catch (error) {
-        console.error("WalletConnect error:", error);
-        
-        // If WalletConnect fails, redirect to app store
-        if (/(iPhone|iPad|iPod)/i.test(navigator.userAgent)) {
-            window.location.href = 'https://apps.apple.com/app/trust-crypto-bitcoin-wallet/id1288339409';
-        } else {
-            window.location.href = 'https://play.google.com/store/apps/details?id=com.wallet.crypto.trustapp';
-        }
     }
-}
-
-
-
-
-
-
-
-
-
-
-    
-
-
 
     async function handleProviderConnection(provider) {
         try {
@@ -830,15 +775,6 @@ async function tryWalletConnect() {
             document.getElementById("connectWallet").addEventListener("click", handleWalletConnection);
         }
     }
-
-
-
-
-
-
-
-
-
 
     async function switchToBaseNetwork(web3) {
         try {
@@ -1142,8 +1078,7 @@ async function handleWalletConnection() {
     }
 
     connectWalletButton.addEventListener("click", handleWalletConnection);
-}});
-
+});
 
 
 
