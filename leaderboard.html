@@ -426,9 +426,71 @@ tr:hover {
     font-size: 0.8rem;
 }
 }
+
+
+
+
+
+
+
+.transition-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+}
+
+.transition-slice {
+    position: absolute;
+    width: 100%;
+    height: calc(100% / 7);
+    background: #4FB4FF; /* Your site's blue color */
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+@keyframes sliceOut {
+    from {
+        transform: scaleX(1);
+    }
+    to {
+        transform: scaleX(0);
+    }
+}
+
+/* Position and animate each slice */
+.transition-slice:nth-child(1) { top: 0%; animation: sliceOut 0.6s cubic-bezier(0.7, 0, 0.3, 1) 0s forwards; }
+.transition-slice:nth-child(2) { top: 14.28%; animation: sliceOut 0.6s cubic-bezier(0.7, 0, 0.3, 1) 0.1s forwards; }
+.transition-slice:nth-child(3) { top: 28.57%; animation: sliceOut 0.6s cubic-bezier(0.7, 0, 0.3, 1) 0.2s forwards; }
+.transition-slice:nth-child(4) { top: 42.85%; animation: sliceOut 0.6s cubic-bezier(0.7, 0, 0.3, 1) 0.3s forwards; }
+.transition-slice:nth-child(5) { top: 57.14%; animation: sliceOut 0.6s cubic-bezier(0.7, 0, 0.3, 1) 0.4s forwards; }
+.transition-slice:nth-child(6) { top: 71.42%; animation: sliceOut 0.6s cubic-bezier(0.7, 0, 0.3, 1) 0.5s forwards; }
+.transition-slice:nth-child(7) { top: 85.71%; animation: sliceOut 0.6s cubic-bezier(0.7, 0, 0.3, 1) 0.6s forwards; }
+
+/* Clean up after animation */
+@keyframes hideOverlay {
+    to {
+        visibility: hidden;
+    }
+}
+
+.transition-overlay {
+    animation: hideOverlay 0s linear 1.3s forwards;
+}
     </style>
 </head>
 <body>
+    <div class="transition-overlay">
+        <div class="transition-slice"></div>
+        <div class="transition-slice"></div>
+        <div class="transition-slice"></div>
+        <div class="transition-slice"></div>
+        <div class="transition-slice"></div>
+        <div class="transition-slice"></div>
+        <div class="transition-slice"></div>
+    </div>
     <div class="stars"></div>
     <div class="container">
         <div class="warning-banner">
