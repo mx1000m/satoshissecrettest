@@ -265,6 +265,54 @@ tr:hover {
     flex-wrap: wrap;
 }
 
+
+
+.back-to-game {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.game-btn {
+    padding: 1rem 2rem;
+    background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+    border: 2px solid #FFD700;
+    border-radius: 8px;
+    color: white;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.9rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.game-btn:hover {
+    background: linear-gradient(45deg, #FF8E53, #FF6B6B);
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+}
+
+
+
+.disclaimer {
+    text-align: center;
+    color: rgba(79, 180, 255, 0.8); /* Matches the blue theme */
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.6rem;
+    margin-top: 1rem;
+    line-height: 1.5;
+    text-shadow: 0 0 10px rgba(79, 180, 255, 0.2);
+}
+
+
+
+
+
+
+
+
 @media (max-width: 600px) {
     .container {
         padding: 1rem;
@@ -333,6 +381,15 @@ tr:hover {
     .footer-links {
         gap: 1rem;
     }
+    .game-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.8rem;
+}
+.disclaimer {
+    font-size: 0.5rem;
+    margin-top: 0.8rem;
+}
+
 }
 
 @media (max-width: 350px) {
@@ -362,6 +419,10 @@ tr:hover {
     .title {
         margin-top: 1rem;
     }
+    .game-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.8rem;
+}
 }
     </style>
 </head>
@@ -396,13 +457,19 @@ tr:hover {
                 </tbody>
             </table>
         </div>
+        <div class="disclaimer">
+            *The leaderboard is updated weekly. New scores will be reflected at the end of each week.
+        </div>
         <div class="pagination">
             <button class="pagination-btn" id="prevPage" disabled>Previous</button>
             <span id="pageInfo" class="page-info">Page 1 of 1</span>
             <button class="pagination-btn" id="nextPage">Next</button>
         </div>
+    <div class="back-to-game">
+        <a href="index.html" class="game-btn">⚔️ Play Again ⚔️</a>
     </div>
-    
+</div>
+
     <footer class="footer">
         <div class="footer-content">
             <div>
