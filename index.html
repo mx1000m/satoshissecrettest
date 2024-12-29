@@ -164,6 +164,48 @@
 
 
 
+
+
+        .leaderboard-btn {
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    padding: 0.7rem 1.5rem;
+    background: linear-gradient(45deg, #72d7e4, #3e77f4);
+    border-radius: 40px;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.9rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-weight: 700;
+    z-index: 1001;
+}
+
+.leaderboard-btn:hover {
+    background: linear-gradient(45deg, #52909c, #3258a8);
+}
+
+
+
+
+
+
+
+@media (max-width: 600px) {
+.leaderboard-btn {
+    top: 50px;
+    right: 10px;
+    padding: 0.5rem 1rem;
+    font-size: 0.7rem;
+}
+}
+
+
+
+
         @media (max-width: 767px) {
             #logo {
                 max-width: 80%;
@@ -497,7 +539,9 @@ input::-webkit-inner-spin-button {
         Make sure you are visiting -&nbsphttps://satoshissecret.com/
     </div>
 
+
     <div id="container">
+        <a href="leaderboard.html" class="leaderboard-btn">Leaderboard</a>
         <div id="logoCharacterContainer">
             <img src="SatoshisSecret_Logo.gif" alt="Satoshi's Secret Logo" id="logo">
             <div id="characterContainer">
@@ -1142,6 +1186,7 @@ async function handleWalletConnection() {
     function startGame() {
         popup.style.display = "none";
         document.getElementById("banner").classList.add("hidden");
+        document.querySelector(".leaderboard-btn").style.display = "none";
         initializeGame();
     }
 
@@ -1167,8 +1212,6 @@ async function handleWalletConnection() {
 
 	    
 </script>
-
-
 
 </body>
 </html>
