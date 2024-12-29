@@ -118,7 +118,7 @@
 }
 
 #banner.hidden {
-            top: -40px; /* Set the banner to be hidden above the screen */
+            top: -40px; 
         }
 
 
@@ -167,7 +167,7 @@
 
 
         .leaderboard-btn {
-    position: fixed;
+    position: absolute; 
     top: 60px;
     right: 20px;
     padding: 0.7rem 1.5rem;
@@ -181,7 +181,7 @@
     transition: all 0.3s ease;
     text-transform: uppercase;
     font-weight: 700;
-    z-index: 1001;
+    z-index: 1;
 }
 
 .leaderboard-btn:hover {
@@ -190,17 +190,13 @@
 
 
 
-
-
-
-
 @media (max-width: 600px) {
-.leaderboard-btn {
-    top: 50px;
-    right: 10px;
-    padding: 0.5rem 1rem;
-    font-size: 0.7rem;
-}
+    .leaderboard-btn {
+        top: 50px;  
+        right: 10px;
+        padding: 0.5rem 1rem;
+        font-size: 0.7rem;
+    }
 }
 
 
@@ -1039,10 +1035,10 @@ function startPriceUpdater() {
 });
 
 // Variables to track button hold state
-let holdIntervalId;  // Changed name to avoid conflict
+let holdIntervalId;  
 let holdTimeout;
 const holdDelay = 500; // Delay before rapid increment starts (1 second)
-const holdSpeed = 50;  // Changed name to avoid conflict
+const holdSpeed = 50;  
 
 // Function to handle button hold
 function handleButtonHold(delta) {
