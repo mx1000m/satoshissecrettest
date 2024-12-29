@@ -499,48 +499,66 @@ tr:hover {
         }
 
         async function loadScores() {
-            try {
-                const response = await fetch('leaderboard.csv');
-                const csvText = await response.text();
-                
-                const rows = csvText.split('\n').filter(row => row.trim());
-                const startIndex = rows[0].toLowerCase().includes('name') ? 1 : 0;
-                
-                // Parse CSV and create initial array
-                let parsedScores = rows.slice(startIndex).map(row => {
-                    const matches = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
-                    const values = matches.map(val => val.replace(/^"|"$/g, '').trim());
-                    
-                    return {
-                        Name: values[0] || '',
-                        Wallet: values[1] || '',
-                        Time: values[2] || '00:00'
-                    };
-                });
+    try {
+        const response = await fetch('leaderboard.csv');
+        const csvText = await response.text();
+        
+        const rows = csvText.split('\n').filter(row => row.trim());
+        const startIndex = rows[0].toLowerCase().includes('name') ? 1 : 0;
+        
+        // Parse CSV and create initial array
+        let parsedScores = rows.slice(startIndex).map(row => {
+            const matches = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
+            const values = matches.map(val => val.replace(/^"|"$/g, '').trim());
+            
+            return {
+                Name: values[0] || '',
+                Wallet: values[1] || '',
+                Time: values[2] || '00:00'
+            };
+        });
 
-                // Sort by time
-                parsedScores.sort((a, b) => {
-                    const timeA = timeToSeconds(a.Time);
-                    const timeB = timeToSeconds(b.Time);
-                    return timeA - timeB;
-                });
-
-                // Filter out entries with '00:00' time
-                parsedScores = parsedScores.filter(score => score.Time !== '00:00');
-
-                // Add original rank to each score
-                allScores = parsedScores.map((score, index) => ({
-                    ...score,
-                    originalRank: index + 1
-                }));
-
-                filteredScores = [...allScores];
-                updatePage(1);
-                updatePaginationControls();
-            } catch (error) {
-                console.error('Error loading scores:', error);
+        // Group by player name and keep only the best time
+        const bestScores = {};
+        parsedScores.forEach(score => {
+            const currentTime = timeToSeconds(score.Time);
+            const existingTime = bestScores[score.Name] ? 
+                timeToSeconds(bestScores[score.Name].Time) : Number.MAX_VALUE;
+            
+            if (currentTime < existingTime) {
+                bestScores[score.Name] = score;
             }
-        }
+        });
+
+        // Convert back to array and sort by time
+        parsedScores = Object.values(bestScores);
+        parsedScores.sort((a, b) => {
+            const timeA = timeToSeconds(a.Time);
+            const timeB = timeToSeconds(b.Time);
+            return timeA - timeB;
+        });
+
+        // Filter out entries with '00:00' time
+        parsedScores = parsedScores.filter(score => score.Time !== '00:00');
+
+        // Add original rank to each score
+        allScores = parsedScores.map((score, index) => ({
+            ...score,
+            originalRank: index + 1
+        }));
+
+        filteredScores = [...allScores];
+        updatePage(1);
+        updatePaginationControls();
+    } catch (error) {
+        console.error('Error loading scores:', error);
+    }
+}
+
+
+
+
+
 
         function filterScores(searchTerm) {
             if (!searchTerm) {
